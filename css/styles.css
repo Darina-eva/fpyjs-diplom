@@ -130,6 +130,29 @@ i.icon.asterisk.loading {
   width: 250px;
 }
 
+.file-uploader-modal .image-preview-container .ui.action.input {
+  width: 250px;
+}
+
+.file-uploader-modal .folder-select-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+}
+
+.file-uploader-modal .folder-select {
+  min-width: 200px;
+  padding: 0.68em 0.5em;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0 0.28571429rem 0.28571429rem 0;
+  background: #fff;
+}
+
+.file-uploader-modal .image-preview-container .file-name {
+  min-width: 0;
+}
+
 /* Модалка просмотра файлов */
 .uploaded-previewer-modal .image-preview-container {
   display: flex;
@@ -158,4 +181,36 @@ i.icon.asterisk.loading {
 
 .uploaded-previewer-modal .image-preview-container .ui.labeled.icon.button > .icon {
   background: none;
+}
+
+.uploaded-previewer-modal .empty-folder {
+  padding: 10px 0 20px;
+  color: #767676;
+}
+
+.ui.modal.uploaded-previewer-modal .folder-header {
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.25em;
+  color: #593565;
+}
+
+.ui.modal.uploaded-previewer-modal .folder-header .icon {
+  display: inline-block;
+  margin: 0;
+  font-size: 1em;
+}
+
+.ui.modal.uploaded-previewer-modal .folder-header .dropdown.icon {
+  transition: transform 0.2s;
+}
+
+.ui.modal.uploaded-previewer-modal .folder-header.collapsed .dropdown.icon {
+  transform: rotate(-90deg);
+}
+
+.uploaded-previewer-modal .folder-content.collapsed {
+  display: none;
 }
