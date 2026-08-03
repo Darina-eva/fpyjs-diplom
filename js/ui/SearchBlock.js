@@ -4,7 +4,8 @@
  * */
 class SearchBlock {
   constructor( element ) {
-
+    this.element = element;
+    this.registerEvents();
   }
 
   /**
@@ -13,7 +14,30 @@ class SearchBlock {
    * только клик по кнопке "Заменить" перед отрисовкой очищает все отрисованные ранее изображения
    */
   registerEvents(){
+    this.element.addEventListener('click', event => {
+      const button = event.target.closest('.replace, .add');
 
+      if (!button) {
+        return;
+      }
+
+      const input = this.element.querySelector('input');
+      const id = input.value.trim();
+
+      if (!id) {
+        return;
+      }
+
+      const isReplace = button.classList.contains('replace');
+
+      VK.get(id, images => {
+        if (isReplace) {
+          App.imageViewer.clear();
+        }
+
+        App.imageViewer.drawImages(images);
+      });
+    });
   }
 
 }
