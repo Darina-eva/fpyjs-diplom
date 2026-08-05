@@ -46,10 +46,18 @@ class VK {
       return;
     }
 
-    const images = result.response.items.map(item => {
-      const largest = item.sizes.reduce((max, size) => size.width > max.width ? size : max);
-      return largest.url;
-    });
+    const images = result.response.items
+      .filter(item => item.sizes && item.sizes.length)
+      .map(item => {
+        const sizes = item.sizes;
+        const largest = sizes.reduce((max, size) => size.width > max.width ? size : max, sizes[sizes.length - 1]);
+
+        return largest.url;
+      });
+
+    if (!images.length) {
+      alert('У пользователя нет доступных фотографий');
+    }
 
     this.lastCallback(images);
     this.lastCallback = () => {};

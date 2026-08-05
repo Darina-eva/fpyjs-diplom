@@ -75,6 +75,7 @@ class PreviewModal extends BaseModal {
       );
 
       this.contentElement.innerHTML = folders.map(folder => this.getFolderHTML(folder)).join('');
+      this.toggleFolder(this.contentElement.querySelector('.folder-header'));
     });
   }
 

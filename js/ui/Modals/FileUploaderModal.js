@@ -7,6 +7,7 @@ class FileUploaderModal extends BaseModal {
     super(element);
     this.contentElement = this.element.querySelector('.content');
     this.imageContainers = this.contentElement.getElementsByClassName('image-preview-container');
+    this.folders = null;
     this.registerEvents();
   }
 
@@ -43,6 +44,11 @@ class FileUploaderModal extends BaseModal {
    * Отображает все полученные изображения в теле всплывающего окна
    */
   showImages(images) {
+    if (this.folders) {
+      this.renderImages(images);
+      return;
+    }
+
     this.contentElement.innerHTML = '<i class="asterisk loading icon massive"></i>';
 
     Yandex.getFolders((err, response) => {
@@ -57,8 +63,15 @@ class FileUploaderModal extends BaseModal {
           .map(item => item.path.replace(/^disk:/, ''))
       );
 
-      this.contentElement.innerHTML = this.getFolderSelectHTML() + images.reverse().map(image => this.getImageHTML(image)).join('');
+      this.renderImages(images);
     });
+  }
+
+  /**
+   * Отрисовывает выбор папки и полученные изображения
+   */
+  renderImages(images) {
+    this.contentElement.innerHTML = this.getFolderSelectHTML() + images.reverse().map(image => this.getImageHTML(image)).join('');
   }
 
   /**
