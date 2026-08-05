@@ -27,6 +27,12 @@ class PreviewModal extends BaseModal {
         removeButton.classList.add('disabled');
 
         Yandex.removeFile(removeButton.dataset.path, (err, response) => {
+          if (err) {
+            removeButton.querySelector('i').className = 'trash icon';
+            removeButton.classList.remove('disabled');
+            return;
+          }
+
           if (response === null) {
             removeButton.closest('.image-preview-container').remove();
           }
@@ -57,6 +63,11 @@ class PreviewModal extends BaseModal {
     this.contentElement.innerHTML = '<i class="asterisk loading icon massive"></i>';
 
     Yandex.getFolders((err, response) => {
+      if (err) {
+        this.contentElement.innerHTML = '<div class="empty-folder">Не удалось получить список папок</div>';
+        return;
+      }
+
       const folders = ['/'].concat(
         response._embedded.items
           .filter(item => item.type === 'dir')
@@ -84,6 +95,12 @@ class PreviewModal extends BaseModal {
     folderContent.innerHTML = '<i class="asterisk loading icon"></i>';
 
     Yandex.getResources(folderHeader.dataset.folder, (err, response) => {
+      if (err) {
+        delete folderContent.dataset.loaded;
+        folderContent.innerHTML = '<div class="empty-folder">Не удалось получить файлы папки</div>';
+        return;
+      }
+
       const files = response._embedded.items.filter(item => item.type === 'file');
 
       if (files.length) {

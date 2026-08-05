@@ -14,6 +14,11 @@ class Yandex {
 
     if (!token) {
       token = prompt('Введите токен для доступа к Yandex API');
+
+      if (!token) {
+        return null;
+      }
+
       localStorage.setItem('yandexToken', token);
     }
 
@@ -21,17 +26,37 @@ class Yandex {
   }
 
   /**
+   * Оборачивает колбек для вывода ошибок запроса
+   */
+  static handleErrors(message, callback){
+    return (err, response) => {
+      if (err) {
+        alert(`${message}: ${err}`);
+      }
+
+      callback(err, response);
+    };
+  }
+
+  /**
    * Метод загрузки файла в облако
    */
   static uploadFile(path, url, callback){
+    const token = this.getToken();
+
+    if (!token) {
+      callback('Токен не получен', null);
+      return;
+    }
+
     createRequest({
       method: 'POST',
       url: `${this.HOST}/resources/upload`,
       headers: {
-        Authorization: `OAuth ${this.getToken()}`,
+        Authorization: `OAuth ${token}`,
       },
       data: { path, url },
-      callback,
+      callback: this.handleErrors('Ошибка загрузки файла', callback),
     });
   }
 
@@ -39,14 +64,21 @@ class Yandex {
    * Метод удаления файла из облака
    */
   static removeFile(path, callback){
+    const token = this.getToken();
+
+    if (!token) {
+      callback('Токен не получен', null);
+      return;
+    }
+
     createRequest({
       method: 'DELETE',
       url: `${this.HOST}/resources`,
       headers: {
-        Authorization: `OAuth ${this.getToken()}`,
+        Authorization: `OAuth ${token}`,
       },
       data: { path },
-      callback,
+      callback: this.handleErrors('Ошибка удаления файла', callback),
     });
   }
 
@@ -54,13 +86,20 @@ class Yandex {
    * Метод получения всех загруженных файлов в облаке
    */
   static getUploadedFiles(callback){
+    const token = this.getToken();
+
+    if (!token) {
+      callback('Токен не получен', null);
+      return;
+    }
+
     createRequest({
       method: 'GET',
       url: `${this.HOST}/resources/files`,
       headers: {
-        Authorization: `OAuth ${this.getToken()}`,
+        Authorization: `OAuth ${token}`,
       },
-      callback,
+      callback: this.handleErrors('Ошибка получения файлов', callback),
     });
   }
 
@@ -68,14 +107,21 @@ class Yandex {
    * Метод получения содержимого папки в облаке
    */
   static getResources(path, callback){
+    const token = this.getToken();
+
+    if (!token) {
+      callback('Токен не получен', null);
+      return;
+    }
+
     createRequest({
       method: 'GET',
       url: `${this.HOST}/resources`,
       headers: {
-        Authorization: `OAuth ${this.getToken()}`,
+        Authorization: `OAuth ${token}`,
       },
       data: { path, limit: 1000 },
-      callback,
+      callback: this.handleErrors('Ошибка получения содержимого папки', callback),
     });
   }
 

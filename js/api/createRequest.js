@@ -10,8 +10,16 @@ const createRequest = (options = {}) => {
   const params = new URLSearchParams(data).toString();
   const requestUrl = params ? `${url}?${params}` : url;
 
-  xhr.addEventListener('load', () => callback(null, xhr.response));
-  xhr.addEventListener('error', () => callback(xhr.statusText, null));
+  xhr.addEventListener('load', () => {
+    if (xhr.status >= 400) {
+      callback(xhr.response && xhr.response.message ? xhr.response.message : xhr.statusText, xhr.response);
+      return;
+    }
+
+    callback(null, xhr.response);
+  });
+
+  xhr.addEventListener('error', () => callback('Ошибка сети', null));
 
   try {
     xhr.open(method, requestUrl);

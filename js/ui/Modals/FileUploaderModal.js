@@ -46,6 +46,11 @@ class FileUploaderModal extends BaseModal {
     this.contentElement.innerHTML = '<i class="asterisk loading icon massive"></i>';
 
     Yandex.getFolders((err, response) => {
+      if (err) {
+        this.contentElement.innerHTML = '<div class="empty-folder">Не удалось получить список папок</div>';
+        return;
+      }
+
       this.folders = ['/'].concat(
         response._embedded.items
           .filter(item => item.type === 'dir')
@@ -121,7 +126,13 @@ class FileUploaderModal extends BaseModal {
 
     const url = imageContainer.querySelector('img').src;
 
-    Yandex.uploadFile(path, url, () => {
+    Yandex.uploadFile(path, url, err => {
+      if (err) {
+        inputElement.classList.remove('disabled');
+        inputElement.classList.add('error');
+        return;
+      }
+
       imageContainer.remove();
 
       if (!this.imageContainers.length) {
