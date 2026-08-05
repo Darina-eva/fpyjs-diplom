@@ -3,6 +3,9 @@
  * Используется как всплывающее окно для загрузки изображений
  */
 class FileUploaderModal extends BaseModal {
+
+  static FORBIDDEN_SYMBOLS = /[\\/:*?"<>|]/;
+
   constructor( element ) {
     super(element);
     this.contentElement = this.element.querySelector('.content');
@@ -130,6 +133,12 @@ class FileUploaderModal extends BaseModal {
 
     if (!name) {
       inputElement.classList.add('error');
+      return;
+    }
+
+    if (FileUploaderModal.FORBIDDEN_SYMBOLS.test(name)) {
+      inputElement.classList.add('error');
+      alert('Имя файла не должно содержать символы \\ / : * ? " < > |');
       return;
     }
 
