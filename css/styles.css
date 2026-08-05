@@ -67,6 +67,14 @@ h2 {
   width: 100%;
 }
 
+.search-block .album-select {
+  padding: 0 0.8em;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-left: none;
+  background: #fff;
+  font-size: 1rem;
+}
+
 .ui.grid > .row.images-wrapper {
   justify-content: space-between;
 }

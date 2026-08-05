@@ -29,6 +29,7 @@ class SearchBlock {
       }
 
       const isReplace = button.classList.contains('replace');
+      const album = this.element.querySelector('.album-select').value;
 
       VK.get(id, images => {
         if (isReplace) {
@@ -36,7 +37,7 @@ class SearchBlock {
         }
 
         App.imageViewer.drawImages(images);
-      });
+      }, album);
     });
   }
 

@@ -12,12 +12,12 @@ class VK {
   /**
    * Получает изображения
    * */
-  static get(id = '', callback){
+  static get(id = '', callback, album = 'profile'){
     this.lastCallback = callback;
 
     const params = new URLSearchParams({
       owner_id: id,
-      album_id: 'profile',
+      album_id: album,
       extended: 1,
       access_token: this.ACCESS_TOKEN,
       v: '5.131',
