@@ -3,6 +3,9 @@
  * Используется для взаимодействием блоком изображений
  * */
 class ImageViewer {
+  /**
+   * @param {HTMLElement} element блок, в котором отображаются изображения и предпросмотр
+   */
   constructor( element ) {
     this.element = element;
     this.previewElement = element.querySelector('.column.six.wide img');
@@ -18,6 +21,7 @@ class ImageViewer {
    * Добавляет или удаляет класс активности у всех изображений
    * 4. Клик по кнопке "Посмотреть загруженные файлы" открывает всплывающее окно просмотра загруженных файлов
    * 5. Клик по кнопке "Отправить на диск" открывает всплывающее окно для загрузки файлов
+   * @returns {void}
    */
   registerEvents(){
     this.imagesContainer.addEventListener('dblclick', event => {
@@ -63,6 +67,7 @@ class ImageViewer {
 
   /**
    * Очищает отрисованные изображения
+   * @returns {void}
    */
   clear() {
     this.imagesContainer.innerHTML = '';
@@ -70,6 +75,8 @@ class ImageViewer {
 
   /**
    * Отрисовывает изображения.
+   * @param {string[]} images ссылки на изображения
+   * @returns {void}
   */
   drawImages(images) {
     const selectAllButton = this.element.querySelector('.select-all');
@@ -82,6 +89,7 @@ class ImageViewer {
 
   /**
    * Контроллирует кнопки выделения всех изображений и отправки изображений на диск
+   * @returns {void}
    */
   checkButtonText(){
     const images = [...this.imagesContainer.querySelectorAll('img')];

@@ -1,5 +1,12 @@
 /**
  * Основная функция для совершения запросов по Yandex API.
+ * @param {Object} [options={}] настройки запроса
+ * @param {string} [options.method='GET'] HTTP метод запроса
+ * @param {string} [options.url=''] адрес запроса
+ * @param {Object} [options.headers={}] заголовки запроса
+ * @param {Object} [options.data={}] данные, которые передаются в строке адреса
+ * @param {Function} [options.callback] обработчик ответа, вызывается с аргументами (err, response)
+ * @returns {void}
  * */
 const createRequest = (options = {}) => {
   const { method = 'GET', url = '', headers = {}, data = {}, callback = () => {} } = options;

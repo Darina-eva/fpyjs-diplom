@@ -8,6 +8,7 @@ class Yandex {
 
   /**
    * Метод формирования и сохранения токена для Yandex API
+   * @returns {string|null} токен из локального хранилища или null, если пользователь его не ввёл
    */
   static getToken(){
     let token = localStorage.getItem('yandexToken');
@@ -27,6 +28,9 @@ class Yandex {
 
   /**
    * Оборачивает колбек для вывода ошибок запроса
+   * @param {string} message текст, который выводится перед описанием ошибки
+   * @param {Function} callback колбек, вызываемый после вывода сообщения
+   * @returns {Function} обработчик ответа для передачи в createRequest
    */
   static handleErrors(message, callback){
     return (err, response) => {
@@ -40,6 +44,10 @@ class Yandex {
 
   /**
    * Метод загрузки файла в облако
+   * @param {string} path путь на диске, по которому сохраняется файл
+   * @param {string} url ссылка на загружаемое изображение
+   * @param {Function} callback вызывается с аргументами (err, response)
+   * @returns {void}
    */
   static uploadFile(path, url, callback){
     const token = this.getToken();
@@ -62,6 +70,9 @@ class Yandex {
 
   /**
    * Метод удаления файла из облака
+   * @param {string} path путь к удаляемому файлу на диске
+   * @param {Function} callback вызывается с аргументами (err, response), при успехе response равен null
+   * @returns {void}
    */
   static removeFile(path, callback){
     const token = this.getToken();
@@ -84,6 +95,8 @@ class Yandex {
 
   /**
    * Метод получения всех загруженных файлов в облаке
+   * @param {Function} callback вызывается с аргументами (err, response), где response содержит массив items
+   * @returns {void}
    */
   static getUploadedFiles(callback){
     const token = this.getToken();
@@ -105,6 +118,9 @@ class Yandex {
 
   /**
    * Метод получения содержимого папки в облаке
+   * @param {string} path путь к папке, например 'disk:/' или 'disk:/TESTING'
+   * @param {Function} callback вызывается с аргументами (err, response), содержимое папки лежит в response._embedded.items
+   * @returns {void}
    */
   static getResources(path, callback){
     const token = this.getToken();
@@ -127,6 +143,8 @@ class Yandex {
 
   /**
    * Метод получения всех папок в корне облака
+   * @param {Function} callback вызывается с аргументами (err, response)
+   * @returns {void}
    */
   static getFolders(callback){
     this.getResources('disk:/', callback);
@@ -134,6 +152,8 @@ class Yandex {
 
   /**
    * Метод скачивания файлов
+   * @param {string} url ссылка на скачиваемый файл
+   * @returns {void}
    */
   static downloadFileByUrl(url){
     const link = document.createElement('a');

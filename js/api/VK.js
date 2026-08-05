@@ -11,6 +11,10 @@ class VK {
 
   /**
    * Получает изображения
+   * @param {string} [id=''] идентификатор пользователя VK
+   * @param {Function} callback вызывается с массивом ссылок на самые крупные изображения
+   * @param {string} [album='profile'] идентификатор альбома: 'profile' или 'wall'
+   * @returns {void}
    * */
   static get(id = '', callback, album = 'profile'){
     this.lastCallback = callback;
@@ -34,6 +38,10 @@ class VK {
   /**
    * Передаётся в запрос VK API для обработки ответа.
    * Является обработчиком ответа от сервера.
+   * @param {Object} result ответ VK API
+   * @param {Object} [result.response] данные ответа со списком фотографий в items
+   * @param {Object} [result.error] описание ошибки, если запрос не выполнен
+   * @returns {void}
    */
   static processData(result){
     const script = document.getElementById('vk-request');

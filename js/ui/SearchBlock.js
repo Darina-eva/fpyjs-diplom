@@ -3,6 +3,9 @@
  * Используется для взаимодействием со строкой ввода и поиска изображений
  * */
 class SearchBlock {
+  /**
+   * @param {HTMLElement} element блок с полем ввода id, выбором альбома и кнопками поиска
+   */
   constructor( element ) {
     this.element = element;
     this.registerEvents();
@@ -12,6 +15,7 @@ class SearchBlock {
    * Выполняет подписку на кнопки "Заменить" и "Добавить"
    * Клик по кнопкам выполняет запрос на получение изображений и отрисовывает их,
    * только клик по кнопке "Заменить" перед отрисовкой очищает все отрисованные ранее изображения
+   * @returns {void}
    */
   registerEvents(){
     this.element.addEventListener('click', event => {

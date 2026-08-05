@@ -6,6 +6,9 @@ class FileUploaderModal extends BaseModal {
 
   static FORBIDDEN_SYMBOLS = /[\\/:*?"<>|]/;
 
+  /**
+   * @param {JQuery} element семантик элемент всплывающего окна
+   */
   constructor( element ) {
     super(element);
     this.contentElement = this.element.querySelector('.content');
@@ -22,6 +25,7 @@ class FileUploaderModal extends BaseModal {
    * 4. Клик по кнопке загрузке по контроллерам изображения:
    * убирает ошибку, если клик был по полю вода
    * отправляет одно изображение, если клик был по кнопке отправки
+   * @returns {void}
    */
   registerEvents(){
     this.element.querySelector('.header .x.icon').addEventListener('click', () => this.close());
@@ -45,6 +49,9 @@ class FileUploaderModal extends BaseModal {
 
   /**
    * Отображает все полученные изображения в теле всплывающего окна
+   * Список папок загружается один раз и сохраняется в свойстве folders
+   * @param {string[]} images ссылки на выбранные изображения
+   * @returns {void}
    */
   showImages(images) {
     if (this.folders) {
@@ -72,6 +79,8 @@ class FileUploaderModal extends BaseModal {
 
   /**
    * Отрисовывает выбор папки и полученные изображения
+   * @param {string[]} images ссылки на выбранные изображения
+   * @returns {void}
    */
   renderImages(images) {
     this.contentElement.innerHTML = this.getFolderSelectHTML() + images.reverse().map(image => this.getImageHTML(image)).join('');
@@ -79,6 +88,7 @@ class FileUploaderModal extends BaseModal {
 
   /**
    * Формирует HTML разметку выбора папки, в которую загружаются все изображения
+   * @returns {string} разметка блока выбора папки
    */
   getFolderSelectHTML() {
     const options = this.folders
@@ -95,6 +105,8 @@ class FileUploaderModal extends BaseModal {
 
   /**
    * Формирует HTML разметку с изображением, именем файла и кнопкной загрузки
+   * @param {string} item ссылка на изображение
+   * @returns {string} разметка блока контейнера изображения
    */
   getImageHTML(item) {
     return `<div class="image-preview-container">
@@ -108,6 +120,8 @@ class FileUploaderModal extends BaseModal {
 
   /**
    * Формирует короткое имя файла с расширением исходного изображения
+   * @param {string} url ссылка на изображение, из которой берётся расширение
+   * @returns {string} имя файла вида 'a1b2c3d4.jpg'
    */
   getFileName(url) {
     const extension = (new URL(url).pathname.match(/\.(\w+)$/) || [null, 'jpg'])[1];
@@ -118,6 +132,7 @@ class FileUploaderModal extends BaseModal {
 
   /**
    * Отправляет все изображения в облако
+   * @returns {void}
    */
   sendAllImages() {
     [...this.imageContainers].forEach(container => this.sendImage(container));
@@ -125,6 +140,8 @@ class FileUploaderModal extends BaseModal {
 
   /**
    * Валидирует изображение и отправляет его на сервер
+   * @param {HTMLElement} imageContainer блок контейнер изображения
+   * @returns {void}
    */
   sendImage(imageContainer) {
     const inputElement = imageContainer.querySelector('.ui.input');

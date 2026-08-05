@@ -3,6 +3,9 @@
  * Используется как обозреватель загруженный файлов в облако
  */
 class PreviewModal extends BaseModal {
+  /**
+   * @param {JQuery} element семантик элемент всплывающего окна
+   */
   constructor( element ) {
     super(element);
     this.contentElement = this.element.querySelector('.content');
@@ -15,6 +18,8 @@ class PreviewModal extends BaseModal {
    * 2. Клик по контроллерам изображения:
    * Отправляет запрос на удаление изображения, если клик был на кнопке delete
    * Скачивает изображение, если клик был на кнопке download
+   * 3. Клик по заголовку папки разворачивает или сворачивает её содержимое
+   * @returns {void}
    */
   registerEvents() {
     this.element.querySelector('.header .x.icon').addEventListener('click', () => this.close());
@@ -58,6 +63,8 @@ class PreviewModal extends BaseModal {
 
   /**
    * Загружает и отрисовывает список папок облака
+   * Первая папка (корень диска) раскрывается автоматически
+   * @returns {void}
    */
   showFolders() {
     this.contentElement.innerHTML = '<i class="asterisk loading icon massive"></i>';
@@ -81,6 +88,8 @@ class PreviewModal extends BaseModal {
 
   /**
    * Разворачивает и сворачивает папку, загружая её содержимое при первом открытии
+   * @param {HTMLElement} folderHeader заголовок папки, за которым следует блок её содержимого
+   * @returns {void}
    */
   toggleFolder(folderHeader) {
     const folderContent = folderHeader.nextElementSibling;
@@ -115,6 +124,9 @@ class PreviewModal extends BaseModal {
 
   /**
    * Отрисовывает изображения в блоке всплывающего окна
+   * @param {Object[]} data файлы, полученные от Yandex API
+   * @param {HTMLElement} [container=this.contentElement] блок, в который отрисовываются изображения
+   * @returns {void}
    */
   showImages(data, container = this.contentElement) {
     container.innerHTML = data.reverse().map(item => this.getImageInfo(item)).join('');
@@ -122,6 +134,8 @@ class PreviewModal extends BaseModal {
 
   /**
    * Возвращает разметку папки с блоком для её содержимого
+   * @param {string} folder путь к папке относительно диска, например '/' или '/TESTING'
+   * @returns {string} разметка заголовка папки и пустого блока её содержимого
    */
   getFolderHTML(folder) {
     return `<div class="ui header folder-header collapsed" data-folder='disk:${folder}'>
@@ -135,6 +149,8 @@ class PreviewModal extends BaseModal {
   /**
    * Форматирует дату в формате 2021-12-30T20:40:02+00:00(строка)
    * в формат «30 декабря 2021 г. в 23:40» (учитывая временной пояс)
+   * @param {string} date дата создания файла в формате ISO
+   * @returns {string} дата в формате «30 декабря 2021 г. в 23:40»
    * */
   formatDate(date) {
     const value = new Date(date);
@@ -147,6 +163,13 @@ class PreviewModal extends BaseModal {
 
   /**
    * Возвращает разметку из изображения, таблицы с описанием данных изображения и кнопок контроллеров (удаления и скачивания)
+   * @param {Object} item файл, полученный от Yandex API
+   * @param {string} item.name имя файла
+   * @param {string} item.created дата создания файла в формате ISO
+   * @param {number} item.size размер файла в байтах
+   * @param {string} item.path путь к файлу относительно диска
+   * @param {string} item.file ссылка на файл
+   * @returns {string} разметка блока с информацией об изображении
    */
   getImageInfo(item) {
     return `<div class="image-preview-container">

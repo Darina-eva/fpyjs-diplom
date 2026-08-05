@@ -3,6 +3,9 @@
  * Используется как базовый класс всплывающего окна
  */
 class BaseModal {
+  /**
+   * @param {JQuery} element семантик элемент всплывающего окна, DOM элемент находится на нулевой позиции
+   */
   constructor( element ) {
     this.semanticElement = element;
     this.element = element[0];
@@ -10,6 +13,7 @@ class BaseModal {
 
   /**
    * Открывает всплывающее окно
+   * @returns {void}
    */
   open() {
     this.semanticElement.modal('show');
@@ -17,6 +21,7 @@ class BaseModal {
 
   /**
    * Закрывает всплывающее окно
+   * @returns {void}
    */
   close() {
     this.semanticElement.modal('hide');
